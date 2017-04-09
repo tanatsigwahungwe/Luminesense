@@ -30,7 +30,7 @@ function checkDatabase(){
       if (result.rows.length){
       	var dataDate = new Date(Date.parse(result.rows[result.rows.length - 1].day));
         var timeDiff = Math.abs(dataDate.getTime() - currDate.getTime());
-        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+        var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         if (diffDays >= 2){
           databaseUpdate();
         }
@@ -40,7 +40,7 @@ function checkDatabase(){
       else{
       	databaseUpdate();
       }
-      
+
     });
 };
 
