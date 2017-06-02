@@ -1,3 +1,4 @@
+var config = require('./config');
 var noble = require('noble');
 var Particle = require('particle-api-js');
 var pg = require('pg');
@@ -20,7 +21,6 @@ var numOn = 0;
 var end_selection;
 var active_imu = 0;
 // MODIFY THIS WITH THE APPROPRIATE URL
-var socket = require('socket.io-client')('128.197.180.199:8080');
 var peripheralIdOrAddress = process.argv[2];
 peripheralIdOrAddress = peripheralIdOrAddress.toLowerCase();
 // Peripheral's service and characteristic UUIDs
@@ -39,11 +39,11 @@ var SELECTED_LUMINAIRES = [];
 var occupancy = 0;
 
 var client = new pg.Client({
-	user: "jryhvlrzsvchoc",
-	password: "0fece6e968bfa67a69e4ed643f60fb9aeb8d7d29d1eada2a493ce5faeef8787b",
-	database: "d9obmj9ncrr8al",
-	port: 5432,
-	host: "ec2-23-21-111-81.compute-1.amazonaws.com",
+	user: config.client.user,
+	password: config.client.password,
+	database: config.client.database,
+	port: config.client.port,
+	host: config.client.host,
 	ssl: true
 });
 client.connect();
@@ -54,7 +54,7 @@ setInterval(checkDatabase, 1000 * 60 * 60);
 //calls checkRoom every second
 setInterval(checkRoom, 1000);
 
-var token = '72409242cf2554bebb494f5e0a94775456005de7';
+var token = config.particle.auth;
 
 function checkRoom(){
 	var query = client.query('SELECT detected FROM adaptive', [], function(err, result){
@@ -315,7 +315,7 @@ function onEndSelectionCharacteristicRead(data, isNotification) {
     }
 }
 
-particle.login({username: 'mcl.testbed@gmail.com', password: 'littlesarmy'}).then(
+particle.login({username: config.particle.username, password: config.particle.password}).then(
   function(data){
     console.log('API call completed on promise resolve: ', data.body.access_token);
   },
